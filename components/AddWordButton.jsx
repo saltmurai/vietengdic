@@ -1,8 +1,26 @@
 import { ActionIcon, Modal, Input, Select, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import { type } from "os";
 
 function AddWordButton() {
   const [opened, { open, close }] = useDisclosure(false);
+  const form = useForm({
+    initialValues: {
+      word: "",
+      type: "",
+      category: "",
+    },
+    validate: {
+      // validate non-empty word
+      word: (value) => value.trim().length === 0,
+      type: (value) => value.trim().length === 0 || value === undefined,
+    },
+  });
+  function handleSubmit(values) {
+    console.log(values);
+    close();
+  }
 
   return (
     <>
@@ -32,20 +50,29 @@ function AddWordButton() {
         </svg>
       </ActionIcon>
       <Modal opened={opened} onClose={close} title="Add new word">
-        <div className="flex flex-col gap-4">
-          <Input size="md" radius="md" placeholder="Input word" />
-          <Select
-            placeholder="Pick word type"
-            data={["Noun", "Verb", "Adj", "Adverb"]}
-          />
-          <Input
-            placeholder="Catergory"
-            data={["Noun", "Verb", "Adj", "Adverb"]}
-          />
-        </div>
-        <div className="mt-5 flex items-center justify-center">
-          <Button>Add to dictionary</Button>
-        </div>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <div className="flex flex-col gap-4">
+            <Input
+              size="md"
+              radius="md"
+              placeholder="Input word"
+              {...form.getInputProps("word")}
+            />
+            <Select
+              required={true}
+              placeholder="Pick word type"
+              data={["Noun", "Verb", "Adj", "Adverb"]}
+              {...form.getInputProps("type")}
+            />
+            <Input
+              placeholder="Catergory"
+              {...form.getInputProps("category")}
+            />
+          </div>
+          <div className="mt-5 flex items-center justify-center">
+            <Button type="submit">Add to dictionary</Button>
+          </div>
+        </form>
       </Modal>
     </>
   );
