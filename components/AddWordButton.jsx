@@ -1,9 +1,8 @@
 import { ActionIcon, Modal, Input, Select, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { type } from "os";
 
-function AddWordButton() {
+function AddWordButton({ setWordList }) {
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
     initialValues: {
@@ -17,8 +16,15 @@ function AddWordButton() {
       type: (value) => value.trim().length === 0 || value === undefined,
     },
   });
+
   function handleSubmit(values) {
     console.log(values);
+    // {word: "test", type: "Noun", category: "test"}
+    // [values.word, values.type, values.category]
+    setWordList((prev) => [
+      ...prev,
+      [values.word, values.type, values.category],
+    ]);
     close();
   }
 
