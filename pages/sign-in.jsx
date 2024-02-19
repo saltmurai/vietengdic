@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "../lib/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/router";
@@ -12,6 +12,16 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    // This function sets up the listener for changes in authentication state
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      if (currentUser) {
+        router.push("/");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   async function login() {
     try {
@@ -27,6 +37,7 @@ export default function SignIn() {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log(result);
+      router.push("/");
     } catch (error) {
       alert(error.message);
       console.log(error);
