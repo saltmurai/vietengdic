@@ -13,6 +13,7 @@
     "@mantine/form": "^7.5.0",
     "@mantine/hooks": "7.4.2",
     "@tabler/icons-react": "^2.46.0",
+    "firebase": "^10.8.0",
     "next": "14.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
