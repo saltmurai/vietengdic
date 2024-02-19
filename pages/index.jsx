@@ -1,12 +1,14 @@
 import { useState } from "react";
 import AddWordButton from "../components/AddWordButton";
 import { Table, Button } from "@mantine/core";
+import { auth } from "../lib/firebase";
 
 const tableHeader = {
   head: ["Word", "Type", "Category"],
 };
 
 export default function IndexPage() {
+  console.log(auth);
   const [wordList, setWordList] = useState([]);
   const tableData = {
     head: tableHeader.head,
