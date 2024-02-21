@@ -29,10 +29,6 @@ function AddWordButton({ setWordList }) {
       category: values.category,
     });
 
-    setWordList((prev) => [
-      ...prev,
-      [values.word, values.type, values.category],
-    ]);
     close();
   }
 

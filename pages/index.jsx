@@ -6,9 +6,7 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 
 import { database } from "../lib/firebase";
-import { get, ref, child } from "firebase/database";
-
-const dbRef = ref(database);
+import { get, ref, child, onValue } from "firebase/database";
 
 const tableHeader = {
   head: ["Word", "Type", "Category"],
@@ -31,14 +29,32 @@ export default function IndexPage() {
       if (currentUser) {
         setUser(currentUser);
         console.log(currentUser);
+
+        const dbref = ref(database, `users/${auth.currentUser.uid}`);
+
+        onValue(dbref, (snapshot) => {
+          const data = snapshot.val();
+          console.log("new value");
+          console.log(data);
+          const array = Object.keys(data).map((key) => [
+            key,
+            data[key].type,
+            data[key].category,
+          ]);
+          console.log(array);
+          setWordList(array);
+        });
       } else {
         // User is signed out
         setUser(null);
         router.push("/sign-in");
       }
     });
+
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {}, []);
 
   async function logout() {
     try {
