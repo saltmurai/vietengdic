@@ -2,6 +2,9 @@ import { ActionIcon, Modal, Input, Select, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 
+import { database, auth } from "../lib/firebase";
+import { get, ref, child, set } from "firebase/database";
+
 function AddWordButton({ setWordList }) {
   const [opened, { open, close }] = useDisclosure(false);
   const form = useForm({
@@ -17,10 +20,15 @@ function AddWordButton({ setWordList }) {
     },
   });
 
-  function handleSubmit(values) {
+  async function handleSubmit(values) {
     console.log(values);
-    // {word: "test", type: "Noun", category: "test"}
-    // [values.word, values.type, values.category]
+    const uid = auth.currentUser.uid;
+
+    await set(ref(database, `users/${uid}/${values.word}`), {
+      type: values.type,
+      category: values.category,
+    });
+
     setWordList((prev) => [
       ...prev,
       [values.word, values.type, values.category],

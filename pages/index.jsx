@@ -5,6 +5,11 @@ import { auth } from "../lib/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 
+import { database } from "../lib/firebase";
+import { get, ref, child } from "firebase/database";
+
+const dbRef = ref(database);
+
 const tableHeader = {
   head: ["Word", "Type", "Category"],
 };
