@@ -36,6 +36,7 @@ export default function IndexPage() {
           const data = snapshot.val();
           console.log("new value");
           console.log(data);
+          if (data === null) return;
           const array = Object.keys(data).map((key) => [
             key,
             data[key].type,
